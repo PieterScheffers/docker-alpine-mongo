@@ -1,10 +1,10 @@
-FROM alpine:edge
-
-RUN apk add --no-cache mongodb
-
-VOLUME /data/db
-EXPOSE 27017 28017
+FROM mvertes/alpine-mongo:4.0.5-0
 
 COPY run.sh /root
-ENTRYPOINT [ "/root/run.sh" ]
-CMD [ "mongod", "--bind_ip", "0.0.0.0" ]
+
+COPY pre_install.js /root
+
+RUN chmod +x /root/run.sh && \
+    chmod +x /root/pre_install.js
+
+CMD [ "mongod", "--bind_ip", "0.0.0.0", "--auth" ]
